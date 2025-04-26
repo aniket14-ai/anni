@@ -1,27 +1,27 @@
-// Loading Screen
+// Loading Screen Removal after 3s
 window.onload = () => {
   setTimeout(() => {
     document.getElementById('loading-screen').style.display = 'none';
   }, 3000);
 }
 
-// Starfield Effect
+// Starfield Effect (Animated Stars)
 const starfield = document.getElementById('starfield');
 const ctx1 = starfield.getContext('2d');
 starfield.width = window.innerWidth;
 starfield.height = window.innerHeight;
 let stars = [];
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 200; i++) {
   stars.push({x: Math.random()*starfield.width, y: Math.random()*starfield.height, r: Math.random()*1.5});
 }
 
 function drawStars() {
-  ctx1.clearRect(0,0,starfield.width,starfield.height);
-  ctx1.fillStyle = '#0ff';
+  ctx1.clearRect(0, 0, starfield.width, starfield.height);
+  ctx1.fillStyle = '#00ffea';
   stars.forEach(s => {
     ctx1.beginPath();
-    ctx1.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx1.arc(s.x, s.y, s.r, 0, Math.PI * 2);
     ctx1.fill();
   });
   requestAnimationFrame(drawStars);
@@ -37,14 +37,14 @@ matrix.height = window.innerHeight;
 let letters = Array(256).join("1").split("");
 
 function drawMatrix() {
-  ctx2.fillStyle = 'rgba(0,0,0,0.05)';
-  ctx2.fillRect(0,0,matrix.width,matrix.height);
+  ctx2.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx2.fillRect(0, 0, matrix.width, matrix.height);
   ctx2.fillStyle = '#0f0';
   letters.map(function(y_pos, index){
-    let text = String.fromCharCode(3e4+Math.random()*33);
-    let x_pos = index*10;
+    let text = String.fromCharCode(3e4 + Math.random() * 33);
+    let x_pos = index * 10;
     ctx2.fillText(text, x_pos, y_pos);
-    letters[index] = (y_pos > 758+Math.random()*1e4) ? 0 : y_pos+10;
+    letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
   });
 }
 setInterval(drawMatrix, 50);
@@ -58,59 +58,31 @@ let dots = [];
 
 for (let i = 0; i < 200; i++) {
   dots.push({
-    x: Math.random()*particles.width,
-    y: Math.random()*particles.height,
-    vx: (Math.random()-0.5)*2,
-    vy: (Math.random()-0.5)*2
+    x: Math.random() * particles.width,
+    y: Math.random() * particles.height,
+    vx: (Math.random() - 0.5) * 2,
+    vy: (Math.random() - 0.5) * 2
   });
 }
 
 function drawParticles() {
-  ctx3.clearRect(0,0,particles.width,particles.height);
-  ctx3.fillStyle = '#0ff';
+  ctx3.clearRect(0, 0, particles.width, particles.height);
+  ctx3.fillStyle = '#ff00ff';
   dots.forEach(p => {
     ctx3.beginPath();
-    ctx3.arc(p.x, p.y, 2, 0, Math.PI*2);
+    ctx3.arc(p.x, p.y, 2, 0, Math.PI * 2);
     ctx3.fill();
     p.x += p.vx;
     p.y += p.vy;
-    if(p.x<0 || p.x>particles.width) p.vx*=-1;
-    if(p.y<0 || p.y>particles.height) p.vy*=-1;
+    if (p.x < 0 || p.x > particles.width) p.vx *= -1;
+    if (p.y < 0 || p.y > particles.height) p.vy *= -1;
   });
   requestAnimationFrame(drawParticles);
 }
 drawParticles();
 
-// Audio Reactive Effect
-const audioUpload = document.getElementById('audioUpload');
-let audioCtx, analyser, source;
-
-audioUpload.onchange = function(){
-  const file = this.files[0];
-  const audio = new Audio(URL.createObjectURL(file));
-  audio.play();
-
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = audioCtx.createAnalyser();
-  source = audioCtx.createMediaElementSource(audio);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-
-  analyser.fftSize = 256;
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-
-  function animateAudio(){
-    requestAnimationFrame(animateAudio);
-    analyser.getByteFrequencyData(dataArray);
-    let average = dataArray.reduce((a,b)=>a+b)/bufferLength;
-    document.body.style.backgroundColor = `rgb(${average}, 0, ${average})`;
-  }
-  animateAudio();
-}
-
 // Secret Console Message
-setTimeout(()=>{
-  console.log("%cHey Anni! 🚀","color:#0ff;font-size:20px;");
-  console.log("%cIf you are seeing this, you're special. 💖 Try opening this on a PC for a surprise!","color:#0f0;font-size:16px;");
+setTimeout(() => {
+  console.log("%cAnni, you are the magic behind this creation! ✨", "color:#ff00ff; font-size:20px;");
+  console.log("%cI hope you enjoy this surprise! 💖 Look in the console for more!", "color:#00ffea; font-size:16px;");
 }, 5000);
